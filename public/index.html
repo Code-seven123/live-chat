@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+      <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+      #room{ font-size: 1.2em }
+
+      #formLogin {
+            width: 100%;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #login{
+            width: 200px;
+            height: 300px;
+            border-radius: 4%;
+            border: 0.1em solid black;
+            padding: 1.5em;
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.12);
+            align-items: center;
+            flex-direction: column;
+        }
+        #login > label{
+            font-size: 1.5em;
+            letter-spacing: 3px;
+            font-family: Candara;
+            margin-bottom: 10%;
+        }
+        #login > button{
+            width: 65%;
+            height: 6%;
+            background-color: #7DFF41;
+            margin: 10px;
+            border-radius: 3px;
+            border: 1px solid black;
+            margin-top: 60%;
+        }
+        #login > button:hover{
+            transform: scale(0.9);
+            transition: 0.5s;
+        }
+        #login > input{
+            margin: 0.5em;
+        }
+        #login > input[name="uniqId"]{
+            width: 30%;
+        }
+  </style>
+</head>
+<body>
+    <h1 id="room"></h1>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <div id="formLogin">
+      <form id="login" action="">
+        <label for="join">Join</label>
+        <input name="uniqId" type="text" placeholder="uniq id" value="gen()" readonly>
+        <input name="username" type="string" id="join" placeholder="input username">
+        <input name="roomId" type="number" placeholder="input room id" required>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const room = document.getElementById('room');
+    document.addEventListener('DOMContentLoaded', () => {
+      form.style.display = "none"
+      room.style.display = "none"
+      document.querySelector("[name='uniqId']").value = new Date().getTime()
+    })
+    document.querySelector("#login").addEventListener('submit', (e) => {
+      e.preventDefault();
+      const a = {
+        a: document.querySelector("[name='uniqId']"),
+        b: document.querySelector("[name='username']"),
+        c: document.querySelector("[name='roomId']"),
+      }
+      room.style.display = ""
+      room.innerHTML = `Room id: ${a.c.value}`
+      if (a.a.value && a.b.value && a.c.value) {
+        socket.emit('login', { userId: a.a.value, username: a.b.value == "" ? "anonim" : a.b.value, roomId: a.c.value });
+        a.a.value = '';
+        a.b.value = ""
+        a.c.value = ""
+        document.querySelector("#login").style.display = "none"
+        form.style.display = ""
+      }
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+
+    socket.on('chat message', (msg) => {
+      const item = document.createElement('li');
+      item.innerHTML = `<div style="color: white; background-color: black">${msg.user}</div> ${msg.message}`;
+      document.getElementById('messages').appendChild(item);
+    });
+  </script>
+</body>
+</html>
