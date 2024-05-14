@@ -54,11 +54,17 @@
             transform: scale(0.9);
             transition: 0.5s;
         }
-        #login > input{
+        #login div > input{
             margin: 0.5em;
         }
-        #login > input[name="uniqId"]{
-            width: 30%;
+        #login input[name="uniqId"]{
+          width: 50%;
+        }
+        #login a{
+          padding: 0.3em;
+          border: 1px solid black;
+          font-size: 0.7em;
+          border-radius: 3px;
         }
   </style>
 </head>
@@ -71,24 +77,29 @@
     <div id="formLogin">
       <form id="login" action="">
         <label for="join">Join</label>
-        <input name="uniqId" type="text" placeholder="uniq id" value="gen()" readonly>
-        <input name="username" type="string" id="join" placeholder="input username">
-        <input name="roomId" type="number" placeholder="input room id" required>
-        <button type="submit">login</button>
+        <div>
+          <input name="uniqId" type="text" placeholder="uniq id" value="gen()" readonly>
+          <a onclick="gen()">rools</a>
+        </div>
+        <div>
+          <input name="username" type="string" id="join" placeholder="input username">
+          <input name="roomId" type="number" placeholder="input room id" required>
+        </div>
+          <button type="submit">login</button>
       </form>
     </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-
+    document.querySelector("[name='uniqId']").value = Math.floor(100000 + Math.random() * 900000);
     const form = document.getElementById('form');
     const input = document.getElementById('input');
     const room = document.getElementById('room');
-    document.addEventListener('DOMContentLoaded', () => {
-      form.style.display = "none"
-      room.style.display = "none"
-      document.querySelector("[name='uniqId']").value = new Date().getTime()
-    })
+    form.style.display = "none"
+    room.style.display = "none"
+    function gen(){
+      document.querySelector("[name='uniqId']").value = Math.floor(100000 + Math.random() * 900000);
+    }
     document.querySelector("#login").addEventListener('submit', (e) => {
       e.preventDefault();
       const a = {
