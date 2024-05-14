@@ -26,5 +26,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Print IP address
+      run: hostname -I
+
     - name: Start application
       run: npm run start
