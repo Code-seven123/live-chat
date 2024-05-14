@@ -1,17 +1,20 @@
-// Import modules
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
-// Initialize Express app and server
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve static files
-app.use(express.static('public'));
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+app.get('/', (req, res) => {
+  res.sendFile(join(__dirname, 'public/index.html'));
+});
+
 const db = {}
-console.log(db)
 function getUser(socketId) {
   for (const userId in db) {
     if (db[userId].socketid == socketId) {
