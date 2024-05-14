@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     const username = db[userId]?.username
     console.log("Message", username, "reacted")
     // Broadcast message to all clients
-    io.to(db[userId]?.roomId).emit('chat message', { message: msg, user: username });
+    io.to(db[userId]?.roomId).emit('chat message', { message: msg, user: username, id: userId });
   });
 
   // Listen for disconnect

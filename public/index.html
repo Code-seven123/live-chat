@@ -75,7 +75,7 @@
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     <div id="formLogin">
-      <form id="login" action="">
+      <form id="login" action="" method="post">
         <label for="join">Join</label>
         <div>
           <input name="uniqId" type="text" placeholder="uniq id" value="gen()" readonly>
@@ -88,7 +88,7 @@
           <button type="submit">login</button>
       </form>
     </div>
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" type="text/javascript"></script>
   <script>
     const socket = io();
     document.querySelector("[name='uniqId']").value = Math.floor(100000 + Math.random() * 900000);
@@ -128,7 +128,7 @@
 
     socket.on('chat message', (msg) => {
       const item = document.createElement('li');
-      item.innerHTML = `<div style="color: white; background-color: black">${msg.user}</div> ${msg.message}`;
+      item.innerHTML = `<div style="color: white; background-color: black">${msg.user} <i>#${msg.id}</i></div> ${msg.message}`;
       document.getElementById('messages').appendChild(item);
     });
   </script>
