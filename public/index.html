@@ -12,10 +12,11 @@
       #input:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
 
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages > li { padding: 0.5rem 1rem; }
-      #messages > li:nth-child(odd) { background: #efefef; }
-      #room{ font-size: 1.2em }
+      #messages { list-style-type: none; margin: 0; padding: 1em; }
+      #messages > li { padding: 0.5rem 1rem;positions: relative;}
+      #messages > li { background: #efefef; }
+      #messages > li > div { padding: 0.2em }
+      #room{ font-size: 1.2em; padding-left: 0.5em }
 
       #formLogin {
             width: 100%;
@@ -79,8 +80,8 @@
       <form id="login" action="" method="post">
         <label for="join">Join</label>
         <input name="uniqId" type="text" placeholder="uniq id" value="######" readonly>
-        <input name="username" type="string" id="join" placeholder="input username">
-        <input name="roomId" type="number" placeholder="input room id" required>
+        <input name="username" type="string" id="join" placeholder="input username" required>
+        <input name="roomId" type="number" placeholder="input room id">
         <button type="submit">login</button>
       </form>
     </div>
@@ -104,8 +105,11 @@
         c: document.querySelector("[name='roomId']"),
       }
       room.style.display = ""
-      room.innerHTML = `Room id: ${a.c.value}`
-      if (a.a.value && a.b.value && a.c.value) {
+      if (a.a.value && a.b.value) {
+        if(a.c.value == null || a.c.value == "" || !a.c.value){
+          a.c.value = "0"
+        }
+        room.innerHTML = a.c.value == "0" ? "global chat" : `Room id: ${a.c.value}`
         me.push(a.a.value)
         socket.emit('login', { userId: a.a.value, username: a.b.value == "" ? "anonim" : a.b.value, roomId: a.c.value });
         a.a.value = '';
@@ -125,7 +129,13 @@
 
     socket.on('chat message', (msg) => {
       const item = document.createElement('li');
-      me[0] == msg.id ? item.style.textAlign = "right" : item.style.textAlign = "left"
+      if(msg.id == me[0]) { 
+        item.style.textAlign = "right"
+        item.style.right = 0
+      } else {
+        item.style.textAlign = "left"
+        item.style.left = 0
+      }
       item.innerHTML = `<div style="color: white; background-color: black">${msg.user} <i>#${msg.id}</i></div> ${msg.message}`;
       document.getElementById('messages').appendChild(item);
     });
