@@ -54,11 +54,12 @@
             transform: scale(0.9);
             transition: 0.5s;
         }
-        #login div > input{
+        #login > input{
             margin: 0.5em;
         }
         #login input[name="uniqId"]{
           width: 50%;
+          text-align: center;
         }
         #login a{
           padding: 0.3em;
@@ -77,15 +78,10 @@
     <div id="formLogin">
       <form id="login" action="" method="post">
         <label for="join">Join</label>
-        <div>
-          <input name="uniqId" type="text" placeholder="uniq id" value="gen()" readonly>
-          <a onclick="gen()">rools</a>
-        </div>
-        <div>
-          <input name="username" type="string" id="join" placeholder="input username">
-          <input name="roomId" type="number" placeholder="input room id" required>
-        </div>
-          <button type="submit">login</button>
+        <input name="uniqId" type="text" placeholder="uniq id" value="######" readonly>
+        <input name="username" type="string" id="join" placeholder="input username">
+        <input name="roomId" type="number" placeholder="input room id" required>
+        <button type="submit">login</button>
       </form>
     </div>
   <script src="/socket.io/socket.io.js"></script>
@@ -98,9 +94,8 @@
     const room = document.getElementById('room');
     form.style.display = "none"
     room.style.display = "none"
-    function gen(){
-      document.querySelector("[name='uniqId']").value = Math.floor(100000 + Math.random() * 900000);
-    }
+    let me = []
+    
     document.querySelector("#login").addEventListener('submit', (e) => {
       e.preventDefault();
       const a = {
@@ -111,6 +106,7 @@
       room.style.display = ""
       room.innerHTML = `Room id: ${a.c.value}`
       if (a.a.value && a.b.value && a.c.value) {
+        me.push(a.a.value)
         socket.emit('login', { userId: a.a.value, username: a.b.value == "" ? "anonim" : a.b.value, roomId: a.c.value });
         a.a.value = '';
         a.b.value = ""
@@ -129,9 +125,11 @@
 
     socket.on('chat message', (msg) => {
       const item = document.createElement('li');
+      me[0] == msg.id ? item.style.textAlign = "right" : item.style.textAlign = "left"
       item.innerHTML = `<div style="color: white; background-color: black">${msg.user} <i>#${msg.id}</i></div> ${msg.message}`;
       document.getElementById('messages').appendChild(item);
     });
+    console.log(me)
   </script>
 </body>
 </html>

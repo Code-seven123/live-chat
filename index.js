@@ -3,6 +3,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import cleanHtml from "sanitize-html"
+import he from 'he'
 
 const app = express();
 const server = http.createServer(app);
@@ -11,6 +13,11 @@ const io = new Server(server, {
     origin: "*",
   }
 });
+
+function clearHtml(i){
+  const resultHe = he.encode(i)
+  return resultHe
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -50,7 +57,7 @@ io.on('connection', (socket) => {
     const username = db[userId]?.username
     console.log("Message", username, "reacted")
     // Broadcast message to all clients
-    io.to(db[userId]?.roomId).emit('chat message', { message: msg, user: username, id: userId });
+    io.to(db[userId]?.roomId).emit('chat message', { message: clearHtml(msg), user: clearHtml(username), id: clearHtml(userId) });
   });
 
   // Listen for disconnect
