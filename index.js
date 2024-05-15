@@ -6,7 +6,11 @@ import { dirname, join } from 'node:path';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  }
+});
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
