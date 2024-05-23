@@ -273,4 +273,8 @@ router.post("/update", checkSchema(updateSchema), async (req, res) => {
     }
   }
 })
+router.get('/robots.txt', (req, res) => {
+  res.sendFile(join(__dirname, "src/robots.txt"));
+});
+
 export default router

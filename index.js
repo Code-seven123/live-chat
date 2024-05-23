@@ -63,9 +63,6 @@ app.use((req, res, next) => {
   req.session.logge
   res.status(404).render("404")
 })
-app.get('/robots.txt', (req, res) => {
-  res.sendFile(join(__dirname, 'src', 'robots.txt'));
-});
 
 const db = {}
 function getUser(socketId) {
