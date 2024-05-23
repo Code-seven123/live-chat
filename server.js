@@ -51,7 +51,13 @@ router.get("/chat", async (req, res) => {
   if(!logged){
     res.redirect('/login')
   } else {
-    res.render("index")
+    const data = await User.findOne({ where: { id: req.session.logged?.split(".")[0] } })
+    if(!data) {
+      res.render("index")
+    } else {
+      const params = new URLSearchParams({ id: data?.id+'.'+hashPass(data?.email) })
+      res.redirect("/verifikasi?"+params.toString())
+    }
   }
 })
 

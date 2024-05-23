@@ -33,7 +33,7 @@ function generateRandomString(length) {
     randomString += charset[randomIndex];
   }
 
-  return randomString;
+  return Buffer.from(randomString).toString("hex")
 }
 if (!fs.existsSync("./salt.txt")) {
   // Menghasilkan string acak dengan panjang 512 karakter
