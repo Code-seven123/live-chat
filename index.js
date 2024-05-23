@@ -5,7 +5,12 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import cleanHtml from "sanitize-html"
 import he from 'he'
-
+import serverRouter from "./server.js"
+import { config } from "dotenv"
+import bodyParser from "body-parser"
+import session from "express-session"
+import fs from "fs"
+config()
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -19,11 +24,36 @@ function clearHtml(i){
   return resultHe
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const generateRandomString = (length) => {
+  return crypto.randomBytes(length).toString('hex').slice(0, length);
+};
 
-app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'public/index.html'));
-});
+if (!fs.existsSync("./salt.txt")) {
+  // Menghasilkan string acak dengan panjang 512 karakter
+  const salt = Buffer.from(generateRandomString(512)).toString("base64")
+
+  // Menyimpan string acak ke dalam file salt.txt
+  fs.writeFileSync("./salt.txt", salt, 'utf8');
+  console.log('salt.txt created with a random string.');
+} else {
+  console.log('salt.txt already exists.');
+}
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.set("views", join(__dirname, "src"))
+app.set("view engine", "ejs")
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  secret: Buffer.from(process.env.SESSION_SECRET).toString("hex"), // Kunci rahasia untuk menandatangani ID sesi
+  resave: false, // Jangan menyimpan sesi yang tidak dimodifikasi
+  saveUninitialized: true, // Simpan sesi yang baru, bahkan jika tidak ada modifikasi
+}));
+app.use(express.static(join(__dirname, 'public')));
+app.use("/", serverRouter)
+app.use((req, res, next) => {
+  req.session.logge
+  res.status(404).render("404")
+})
 
 const db = {}
 function getUser(socketId) {

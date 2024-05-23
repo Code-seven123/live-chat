@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otp Verification</title>
+    <style>
+        *
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    height: 100vh;
+    background-color:#242B2E;
+    color: #fff;
+}
+.otp
+{
+    display: flex;
+    margin-bottom: 50px;
+}
+.input{
+  text-transform: uppercase;
+}
+.otp input
+{
+    width: 60px;
+    font-size: 24px;
+    margin: 2px;
+    padding: 10px;
+    background:none;
+    outline: none;
+    border: 2px solid #27212d;
+    border-radius: 5px;
+    text-align: center;
+    color: #fff;
+    transition: all .3s ease;
+}
+.otp input:focus
+{
+    border: 2px solid #a527ff;
+    box-shadow: 0 0 4px 4px #a527ff61;
+}
+.spacing
+{
+    margin-right: 1rem !important;
+}
+button
+{
+    padding: 15px 55px;
+    background-color: #a527ff;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .3s;
+}
+button:active
+{
+    transform: scale(.9);
+}
+    </style>
+</head>
+
+<body>
+    <h1>Verify Your Account</h1>
+    <br/>
+    <br/>
+    <h5>We Emailed you the Six digit code verify your account</h5>
+    <br/>
+
+    <br/>
+
+    <div class="otp">
+        <input class="input" type="text" maxlength="1">
+        <input class="input" type="text" maxlength="1">
+        <input class="input" type="text" maxlength="1" class="spacing">
+        <input class="input" type="text" maxlength="1">
+        <input class="input" type="text" maxlength="1">
+        <input class="input" type="text" maxlength="1">
+    </div>
+
+    <small>
+        didn't get the otp
+        <a href="/resend?id=<%= id %>" class="text-decoration-none">Resend</a>
+    </small>
+    <br/>
+    <button onclick="send()">Validate</button>
+    <script>
+      function send(){
+        const value = []
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const data = document.querySelectorAll("input[type='text']")
+        data.forEach((input, index) => {
+          value.push(input.value)
+        })
+        fetch("/validate", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ otp: value.join("").toUpperCase(), id: urlParams.get("id") })
+        }).then(() => { console.log("sukses sending otp"); location.href = '/' }).catch(() => console.log("failed sending otp"))
+      }
+    </script>
+</body>
+
+</html>

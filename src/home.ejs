@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #000;
+            color: #fff;
+            background-image: url("/gambar.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .content h1 {
+            font-size: 2.5rem;
+            margin: 0.5rem;
+        }
+        .content p {
+            font-size: 1.1rem;
+            color: #ddd;
+            margin-bottom: 2rem;
+        }
+        .icon-message {
+            font-size: 4rem;
+            color: #25D366;
+            margin: 1.5rem 0;
+        }
+        .btn {
+            background-color: #25D366;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #1ebe58;
+        }
+        .footer {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 1rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Live Chat</h1>
+    </div>
+    <div class="content">
+        <h1>Live Chat</h1>
+        <i class="fas fa-comments icon-message"></i>
+        <p>Welcome to the Live Chat. Connect with people in real-time!</p>
+        <button class="btn" onclick="location.href = '/chat'">Start Chatting</button>
+    </div>
+    <div class="footer">© 2024 Live Chat. All rights reserved.</div>
+</body>
+</html>
