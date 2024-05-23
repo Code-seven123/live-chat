@@ -45,7 +45,9 @@ if (!fs.existsSync("./salt.txt")) {
 } else {
   console.log('salt.txt already exists.');
 }
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
 app.set("views", join(__dirname, "src"))
 app.set("view engine", "ejs")
 app.use(bodyParser.json());
@@ -61,6 +63,9 @@ app.use((req, res, next) => {
   req.session.logge
   res.status(404).render("404")
 })
+app.get('/robots.txt', (req, res) => {
+  res.sendFile(join(__dirname, 'src', 'robots.txt'));
+});
 
 const db = {}
 function getUser(socketId) {
