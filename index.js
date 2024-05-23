@@ -24,10 +24,17 @@ function clearHtml(i){
   return resultHe
 }
 
-const generateRandomString = (length) => {
-  return crypto.randomBytes(length).toString('hex').slice(0, length);
-};
+function generateRandomString(length) {
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>/?';
+  let randomString = '';
 
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    randomString += charset[randomIndex];
+  }
+
+  return randomString;
+}
 if (!fs.existsSync("./salt.txt")) {
   // Menghasilkan string acak dengan panjang 512 karakter
   const salt = Buffer.from(generateRandomString(512)).toString("base64")
